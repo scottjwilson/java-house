@@ -14,7 +14,7 @@ const Home: NextPage = () => {
     const { data: houses, status } = useQuery("houses", fetchHouses);
 
     if (status === "loading") {
-      return <h1>Loading...</h1>;
+      return <h1></h1>;
     }
     if (status === "error") {
       return <h1>Something went wrong...</h1>;

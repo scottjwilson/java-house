@@ -1,19 +1,11 @@
 import Link from "next/link";
 import { FaHome, FaBath } from "react-icons/fa";
 import formatMoney from "../lib/formatMoney";
-interface House {
-  id: string;
-  address: string;
-  city: string;
-  state: string;
-  bedrooms: number;
-  bathrooms: number;
-  price: number;
-  forsale: boolean;
-}
+import { HouseProps } from "../types";
+
 export default function HouseCard({
   house: { id, address, city, state, bedrooms, bathrooms, price, forsale },
-}) {
+}: HouseProps) {
   return (
     <>
       <Link href={`/houses/${id}`}>

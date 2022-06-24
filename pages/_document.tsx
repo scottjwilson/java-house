@@ -39,6 +39,7 @@ class MyDocument extends Document {
             sizes="196x196"
             href="favicon.ico"
           />
+          <link rel="shortcut icon" href="#" />
         </Head>
         <body>
           <Main />
