@@ -6,12 +6,12 @@ import HouseCard from "../components/HouseCard";
 
 const Home: NextPage = () => {
   async function fetchHouses() {
-    const res = await fetch("http://localhost:8080/api/v1/house");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`);
     return res.json();
   }
 
   function Houses() {
-    const { data: houses, status } = useQuery("houses", fetchHouses);
+    const { data: houses, status } = useQuery("houses", fetchHouses, {});
 
     if (status === "loading") {
       return <h1></h1>;

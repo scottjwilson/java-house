@@ -1,9 +1,7 @@
 import axios from "axios";
 import { NextSeo } from "next-seo";
-import { useRouter } from "next/router";
-import { FormEvent, SetStateAction, useState } from "react";
-import { useQuery, useMutation, queryCache } from "react-query";
-import { toast } from "react-hot-toast";
+
+import { FormEvent, useState } from "react";
 
 import Section from "./Section";
 
@@ -20,16 +18,20 @@ export default function addHouse() {
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+
     try {
-      const res = await axios.post("http://localhost:8080/api/v1/house", {
-        address,
-        city,
-        state,
-        bedrooms,
-        bathrooms,
-        price,
-        forsale,
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`,
+        {
+          address,
+          city,
+          state,
+          bedrooms,
+          bathrooms,
+          price,
+          forsale,
+        }
+      );
 
       if (res.status === 200) {
         setLoading(false);

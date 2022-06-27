@@ -28,7 +28,11 @@ export default function HouseCard({
             </p>
           </div>
 
-          {forsale && <span className="badge badge-sm">On The Market</span>}
+          {forsale ? (
+            <span className="badge badge-sm">On The Market</span>
+          ) : (
+            <span className="badge badge-sm badge-outline">Off The Market</span>
+          )}
 
           <p>{formatMoney(price)}</p>
         </div>
