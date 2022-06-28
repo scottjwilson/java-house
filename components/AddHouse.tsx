@@ -2,6 +2,10 @@ import axios from "axios";
 import { NextSeo } from "next-seo";
 
 import { FormEvent, useState } from "react";
+import { useMutation } from "react-query";
+
+import useCreateHouse from "../hooks/useCreateHouse";
+import FormContainer from "./FormContainer";
 
 import Section from "./Section";
 
@@ -14,43 +18,25 @@ export default function addHouse() {
   const [bathrooms, setBathrooms] = useState(3);
   const [price, setPrice] = useState(4000000);
   const [forsale, setForSale] = useState(true);
+  const values = { address, city, state, bedrooms, bathrooms, price, forsale };
+
+  const mutation = useMutation((values) => {
+    return axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`,
+      values
+    );
+  });
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`,
-        {
-          address,
-          city,
-          state,
-          bedrooms,
-          bathrooms,
-          price,
-          forsale,
-        }
-      );
-
-      if (res.status === 200) {
-        setLoading(false);
-      }
-    } catch (error) {
-      alert(error);
-    }
+    mutation.mutate(values);
   }
 
   const inputClass = `input input-bordered`;
 
   return (
     <>
-      <NextSeo
-        title="Java Real Estate Manager"
-        description="Java Real Estate Manager"
-      />
-
-      <Section title="Add new house">
+      <FormContainer>
         <form className="form-control" onSubmit={onSubmit}>
           <label htmlFor="address" className="label">
             <span className="label-text">Address</span>
@@ -132,7 +118,7 @@ export default function addHouse() {
             </button>
           </div>
         </form>
-      </Section>
+      </FormContainer>
     </>
   );
 }

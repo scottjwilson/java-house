@@ -1,43 +1,44 @@
-import type { NextPage } from "next";
-
+import { useState } from "react";
 import { useQuery } from "react-query";
 import AddHouse from "../components/AddHouse";
 import HouseCard from "../components/HouseCard";
+import Modal from "../components/Modal";
 
-const Home: NextPage = () => {
-  async function fetchHouses() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/house`);
-    return res.json();
-  }
+import useHouses from "../hooks/useHouses";
 
-  function Houses() {
-    const { data: houses, status } = useQuery("houses", fetchHouses, {});
+export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const houseQuery = useHouses();
 
-    if (status === "loading") {
-      return <h1></h1>;
-    }
-    if (status === "error") {
-      return <h1>Something went wrong...</h1>;
-    }
-    if (status === "success") {
-      return (
-        <div className="flex items-center flex-col">
-          {houses.map((house) => (
-            <HouseCard house={house} />
-          ))}
-        </div>
-      );
-    }
-  }
   return (
-    <>
+    <section>
       <h1 className="text-center text-3xl py-8 font-bold">
         Real Estate Manager
       </h1>
-      <Houses />
-      <AddHouse />
-    </>
-  );
-};
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        title="Add new 🏠"
+      >
+        <AddHouse />
+      </Modal>
+      {houseQuery.isLoading ? (
+        <span>Loading...</span>
+      ) : houseQuery.isError ? (
+        houseQuery.error.message
+      ) : (
+        <div className="flex items-center flex-col">
+          {houseQuery.data.map((house) => (
+            <HouseCard house={house} />
+          ))}
+        </div>
+      )}
 
-export default Home;
+      <div className="flex justify-center">
+        <button className="btn" onClick={() => setShowModal(true)}>
+          add new
+        </button>
+      </div>
+    </section>
+  );
+}
